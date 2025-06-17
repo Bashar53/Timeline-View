@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using TimeLineViwer.Data;
 using TimeLineViwer.Hub;
 
 namespace TimeLineViwer.Controllers
@@ -10,9 +11,13 @@ namespace TimeLineViwer.Controllers
     public class TimeLineController : ControllerBase
     {
         private IHubContext<MessageHub, IMessageHubClient> messageHub;
-        public TimeLineController(IHubContext<MessageHub, IMessageHubClient> _messageHub)
+        private readonly TimeLineDBContext _context;
+
+
+        public TimeLineController(IHubContext<MessageHub, IMessageHubClient> _messageHub, TimeLineDBContext context)
         {
             messageHub = _messageHub;
+            context = _context;
 
         }
         [HttpPost]
