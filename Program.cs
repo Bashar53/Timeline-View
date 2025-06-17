@@ -1,3 +1,5 @@
+using TimeLineViwer.Hub;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,10 +22,14 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("CORSPolicy");
 app.UseRouting();
-app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
-
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllers();
+    endpoints.MapHub<MessageHub>("/posts");
+});
+app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
