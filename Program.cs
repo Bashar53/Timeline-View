@@ -7,7 +7,12 @@ builder.Services.AddSignalR();
 builder.Services.AddCors(options => {
     options.AddPolicy("CORSPolicy", builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed((hosts) => true));
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+             .AddJsonOptions(options =>
+             {
+                 // Disabled Camel Case in JSON serialization and deserialization
+                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+             });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
