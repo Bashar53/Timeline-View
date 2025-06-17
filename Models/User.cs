@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeLineViwer.Models
 {
@@ -7,6 +8,7 @@ namespace TimeLineViwer.Models
         [Key]   
         public int UserId { get; set; }
         public string UserName { get; set; }
-       
+        
+
     }
 }
