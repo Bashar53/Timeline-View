@@ -12,7 +12,7 @@ public class Post
     public string Content { get; set; }
     [StringLength(500, ErrorMessage = "MediaURL cannot exceed 500 characters.")]
     public string MediaURL { get; set; }    
-    public string TimeStamp { get; set; }
+    public DateTime TimeStamp { get; set; }
     public ICollection<User>? Users { get; set; }   
 
 
