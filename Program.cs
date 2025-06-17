@@ -3,6 +3,8 @@ using TimeLineViwer.Data;
 using TimeLineViwer.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<TimeLineDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddSignalR();
@@ -15,9 +17,6 @@ builder.Services.AddControllers()
                  // Disabled Camel Case in JSON serialization and deserialization
                  options.JsonSerializerOptions.PropertyNamingPolicy = null;
              });
-builder.Services.AddDbContext<TimeLineDBContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-            );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
