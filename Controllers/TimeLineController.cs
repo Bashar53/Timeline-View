@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Extensions.Msal;
+using System.Resources;
 using TimeLineViwer.Data;
 using TimeLineViwer.Hub;
+using TimeLineViwer.Models;
 
 namespace TimeLineViwer.Controllers
 {
@@ -10,24 +14,28 @@ namespace TimeLineViwer.Controllers
     [ApiController]
     public class TimeLineController : ControllerBase
     {
-        private IHubContext<MessageHub, IMessageHubClient> messageHub;
+        private IHubContext<MessageHub, IMessageHubClient> _messageHub;
         private readonly TimeLineDBContext _context;
-
-
-        public TimeLineController(IHubContext<MessageHub, IMessageHubClient> _messageHub, TimeLineDBContext context)
+        public TimeLineController(IHubContext<MessageHub, IMessageHubClient> messageHub, TimeLineDBContext context)
         {
-            messageHub = _messageHub;
-            context = _context;
+            _messageHub = _messageHub;
+            _context = context;
 
+        }
+        [HttpGet("{userid:int}")]
+        public async Task<ActionResult<PostVM>> GetPost(int userid)
+        {
+            var result =  await _context.Posts.Where(x => x.UserId == userid).ToListAsync();
+            return Ok(result);
         }
         [HttpPost]
         [Route("posts")]
-        public string Get()
+        public async Task<ActionResult<Post>> CraetePost(Post post)
         {
-            List<string> posts = new List<string>();
-            
-            messageHub.Clients.All.SendOffersToUser(posts);
-            return "posts created!";
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPosts", new { id = post.PostId }, post);
         }
     }
 }
